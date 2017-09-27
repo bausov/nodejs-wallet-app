@@ -1,8 +1,8 @@
 'use strict';
 
 const ApplicationError = require('libs/application-error');
-
 const FileModel = require('./common/fileModel');
+const luhn = require('luhn');
 
 class Cards extends FileModel {
 	constructor() {
@@ -16,7 +16,7 @@ class Cards extends FileModel {
 	 * @returns {Promise.<Object>}
 	 */
 	async create(card) {
-		const isDataValid = card && card.hasOwnProperty('cardNumber') && card.hasOwnProperty('balance');
+		const isDataValid = card && card.hasOwnProperty('cardNumber') && card.hasOwnProperty('balance') && luhn.validate(card.cardNumber);
 		if (isDataValid) {
 			card.id = this._dataSource.reduce((max, item) => Math.max(max, item.id), 0) + 1;
 			this._dataSource.push(card);
