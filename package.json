@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-wallet-app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "NODE_PATH=. node ./source/app.js",
+    "watch": "NODE_PATH=. nodemon --watch source ./source/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "jade": "~1.11.0",
+    "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.2.1",
+    "koa-static": "^4.0.1",
+    "libs": "^0.1.2",
+    "morgan": "~1.8.1",
+    "serve-favicon": "~2.4.2",
+    "source": "0.0.3"
+  }
+}
