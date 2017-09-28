@@ -9,16 +9,35 @@ class Cards extends FileModel {
 		super('cards.json');
 	}
 
+    async get(id) {
+        if (!!id) {
+            return await this._dataSource.filter(function (el) {
+                return el.cardId === id;
+            });
+        } else {
+            throw new ApplicationError('No such card', 400);
+        }
+    }
+
 	/**
 	 * Добавляет карту
 	 *
-	 * @param {Object} card описание карты
+	 * @param {Object} cardData описание карты
 	 * @returns {Promise.<Object>}
 	 */
-	async create(card) {
-		const isDataValid = card && card.hasOwnProperty('cardNumber') && card.hasOwnProperty('balance') && luhn.validate(card.cardNumber);
+	async create(cardData) {
+		const isDataValid = cardData &&
+			cardData.hasOwnProperty('cardNumber') &&
+			cardData.hasOwnProperty('balance') &&
+			luhn.validate(cardData.cardNumber);
+
 		if (isDataValid) {
-			card.id = this._dataSource.reduce((max, item) => Math.max(max, item.id), 0) + 1;
+			const card = {
+                id: this._dataSource.reduce((max, item) => Math.max(max, item.id), 0) + 1,
+				cardNumber: cardData.cardNumber,
+				balance: cardData.balance
+			};
+
 			this._dataSource.push(card);
 			await this._saveUpdates();
 			return card;

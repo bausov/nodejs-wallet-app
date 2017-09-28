@@ -6,22 +6,29 @@ const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser')();
 
 const getCardsController = require('./controllers/cards/get-cards');
-const createCardController = require('./controllers/cards/create');
-const deleteCardController = require('./controllers/cards/delete');
+const createCardController = require('./controllers/cards/create-cards');
+const deleteCardController = require('./controllers/cards/delete-cards');
+
+const getTransactionsController = require('./controllers/transactions/get-transaction');
+const createTransactionsController = require('./controllers/transactions/create-transaction');
 
 const errorController = require('./controllers/error');
 
 const ApplicationError = require('libs/application-error');
 const CardsModel = require('source/models/cards');
+const TransactionsModel = require('source/models/transactions');
 
 const app = new Koa();
 
 // Сохраним параметр id в ctx.params.id
 router.param('id', (id, ctx, next) => next());
-
+// Cards
 router.get('/cards/', getCardsController);
 router.post('/cards/', createCardController);
 router.delete('/cards/:id', deleteCardController);
+// Transactions
+router.get('/cards/:id/transactions/', getTransactionsController);
+router.post('/cards/:id/transactions/', createTransactionsController);
 
 router.all('/error', errorController);
 
@@ -51,10 +58,17 @@ app.use(async (ctx, next) => {
 	await next();
 });
 
+// Создадим модель Transactions на уровне приложения и проинициализируем ее
+app.use(async (ctx, next) => {
+    ctx.TransactionsModel = new TransactionsModel();
+    await ctx.TransactionsModel.loadFile();
+    await next();
+});
+
 app.use(bodyParser);
 app.use(router.routes());
 app.use(serve('./public'));
 
-app.listen(3000, () => {
+app.listen(3001, () => {
 	console.log('Application started');
 });

@@ -18,6 +18,7 @@
     "koa-router": "^7.2.1",
     "koa-static": "^4.0.1",
     "libs": "^0.1.2",
+    "luhn": "^2.1.0",
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2",
     "source": "0.0.3"
